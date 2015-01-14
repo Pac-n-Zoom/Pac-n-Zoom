@@ -13,10 +13,12 @@
 		android:layout_height="wrap_content"
 		android:hint="@string/ed_tag_hint"
 		android:inputType="text"
-		android:imeOptions="actionSend" />
+		android:imeOptions="actionSend" 
+		android:onClick="onClick"
+		android:clickable="true"/>
 
 	<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/gridview"
+		android:id="@+id/tnview"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_marginTop="40dp"
@@ -27,6 +29,5 @@
 		android:stretchMode="columnWidth"
 		android:verticalSpacing="5dp"
 		android:padding="5dp"/>
-
 
 </RelativeLayout>

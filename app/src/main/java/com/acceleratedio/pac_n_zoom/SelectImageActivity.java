@@ -1,9 +1,26 @@
+/*
+ * Copyright (C) 2014 Accelerated I/O, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.acceleratedio.pac_n_zoom;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +49,7 @@ public class SelectImageActivity extends Activity implements OnClickListener {
 	private ImageView image;// ImageView
   private RelativeLayout mainLayout; // Parent layout
 	private static Context mContext;
+  public static String orgFil;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +77,11 @@ public class SelectImageActivity extends Activity implements OnClickListener {
       String[] filePath = { MediaStore.Images.Media.DATA };
       Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
       cursor.moveToFirst();
-      String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+      orgFil = cursor.getString(cursor.getColumnIndex(filePath[0]));
+			final BitmapFactory.Options bmp_opt = new BitmapFactory.Options();
             
       // Now we need to set the GUI ImageView data with data read from the picked file.
-      image.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+      image.setImageBitmap(dcodRszdBmpFil(orgFil, bmp_opt));
             
       // At the end remember to close the cursor or you will end with the RuntimeException!
       cursor.close();
@@ -77,6 +96,30 @@ public class SelectImageActivity extends Activity implements OnClickListener {
 			btn_anm = (Button) findViewById(R.id.btn_anm);
 			btn_anm.setOnClickListener(this);
 		}
+	}
+
+	public static Bitmap dcodRszdBmpFil(String orgFil, BitmapFactory.Options options)
+	{
+    options.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(orgFil, options);
+		options.inSampleSize = calInSampleSize(options);
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeFile(orgFil, options);
+	}
+
+	public static int calInSampleSize(BitmapFactory.Options options) {
+		
+		final int height = options.outHeight;
+    final int width = options.outWidth;
+    int inSampleSize = 1;
+		int pxl_nmbr = height * width;
+
+		while (pxl_nmbr > 500000) {
+			pxl_nmbr /= 4;
+			inSampleSize *= 2;			
+		}
+
+		return inSampleSize;
 	}
 	
 	@Override
@@ -99,6 +142,7 @@ public class SelectImageActivity extends Activity implements OnClickListener {
 			case R.id.btn_anm:
 
 		    Intent intent = new Intent(SelectImageActivity.this, PickAnmActivity.class);
+				intent.putExtra("requestString", " ");
 				intent.setClassName("com.acceleratedio.pac_n_zoom", "com.acceleratedio.pac_n_zoom.PickAnmActivity");
 		    startActivity(intent);
 		}

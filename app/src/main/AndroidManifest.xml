@@ -16,12 +16,24 @@
 	<application
     android:name=".MyGridApplication"
 		android:allowBackup="true"
-		android:icon="@drawable/ic_launcher"
+		android:icon="@drawable/io_icon"
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme" >
 
 		<activity
 			android:name="com.acceleratedio.pac_n_zoom.PickAnmActivity"
+			android:theme="@android:style/Theme.NoTitleBar"
+			android:windowSoftInputMode="stateHidden"
+		/>
+
+		<activity
+			android:name="com.acceleratedio.pac_n_zoom.FindTagsActivity"
+			android:theme="@android:style/Theme.NoTitleBar"
+			android:windowSoftInputMode="stateHidden"
+		/>
+
+		<activity
+			android:name="com.acceleratedio.pac_n_zoom.SaveAnmActivity"
 			android:theme="@android:style/Theme.NoTitleBar"
 			android:windowSoftInputMode="stateHidden"
 		/>
@@ -35,6 +47,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-    <activity android:name=".ActivityTwo"></activity>
+
+    <activity android:name=".AnimActivity"></activity>
 	</application>
 </manifest>
